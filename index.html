@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>wowwowwow</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: black;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+/* Fireworks */
+canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+}
+
+/* Center content */
+.content {
+    position: relative;
+    z-index: 2;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 20px;
+}
+
+h1 {
+    font-size: clamp(32px, 5vw, 64px);
+    margin: 0;
+    text-transform: uppercase;
+}
+
+h2 {
+    font-size: clamp(14px, 2vw, 20px);
+    font-weight: normal;
+    margin: 10px 0 30px;
+    opacity: 0.9;
+}
+
+/* Buttons */
+.buttons {
+    display: flex;
+    gap: 20px;
+}
+
+button {
+    padding: 14px 28px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+.christmas {
+    background: #c1121f;
+    color: white;
+}
+
+.newyear {
+    background: #fca311;
+    color: black;
+}
+
+/* Message box */
+.message {
+    position: absolute;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+    color: white;
+    text-align: center;
+    padding: 30px;
+}
+
+.message.active {
+    display: flex;
+}
+
+.message-box {
+    background: rgba(0,0,0,0.7);
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 600px;
+}
+
+.message-box h2 {
+    margin-top: 0;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div class="content" id="main">
+    <h1>merry christmas and a happy new year guys</h1>
+    <h2>click lng base on the event tingob kay natamad ko mag code lain2 HIHI
+        di ko sentimental ya flex lng ko balo ko mag himo web:> -htes
+    </h2>
+
+    <div class="buttons">
+        <button class="christmas" onclick="showMessage('christmas')">
+            🎄 Christmas
+        </button>
+        <button class="newyear" onclick="showMessage('newyear')">
+            🎉 New Year
+        </button>
+    </div>
+</div>
+
+<!-- Christmas Message -->
+<div class="message" id="christmas">
+    <div class="message-box">
+        <h2>🎄 Merry Christmas!</h2>
+        <p>
+Merry christmas da sa inyo guyss maging mabuot kita subong ha
+birthday ni Jesus, Gift konani sinyo guys budlay bala mag code 
+tas isa ko pagid ka gift sa inyo is ipag pray ta kamo nga di na kamo 
+mag ginago kag mag tarong na skwela thankyouuu safe kamo da dapat 
+kumpleto kamoy nyo asta newyear ha AHHAHHAHAHHAH WISH U ALL THE BEST GUYS
+        </p>
+        <button onclick="goBack()">Back</button>
+    </div>
+</div>
+
+<!-- New Year Message -->
+<div class="message" id="newyear">
+    <div class="message-box">
+        <h2>🎉 way pa unod guys di pa newyear</h2>
+        <p>
+way spoiler ah🥂
+        </p>
+        <button onclick="goBack()">Back</button>
+    </div>
+
+</div>
+
+    <!-- New Year Message -->
+<div class="message" id="newyear2">
+    <div class="message-box">
+        <h2>🎉 Happy new year ebriwan</h2>
+        <p>
+kumpleto pa kamoy nyo? way man guro may nalukpan 5star ah HAHHA
+niweyz bilin tana katarantaduhan ta sa 2025 ha maging mabuot 
+na kita sini nga 2026 syet kululbaan college mo lng na ahh 
+HAPPY NEW YEAR GUYSS another year another slay?? malalaman na HAHHA
+cheers for 2026 tani damo blessing nga maabot ba HAHAHAH🥂
+        </p>
+        <button onclick="goBack()">Back</button>
+    </div>
+</div>
+
+<script>
+/* ===== BUTTON LOGIC ===== */
+function showMessage(type) {
+    document.getElementById("main").style.display = "none";
+    document.getElementById(type).classList.add("active");
+}
+
+function goBack() {
+    document.getElementById("main").style.display = "flex";
+    document.querySelectorAll(".message").forEach(m => m.classList.remove("active"));
+}
+
+/* ===== FIREWORKS ===== */
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+let w, h, particles = [];
+
+function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resize);
+resize();
+
+function firework() {
+    const x = Math.random() * w;
+    const y = Math.random() * h * 0.6;
+    const color = `hsl(${Math.random() * 360},100%,60%)`;
+
+    for (let i = 0; i < 80; i++) {
+        particles.push({
+            x, y,
+            vx: (Math.random() - 0.5) * 6,
+            vy: (Math.random() - 0.5) * 6,
+            life: 1,
+            color
+        });
+    }
+}
+
+function animate() {
+    ctx.fillStyle = "rgba(0,0,0,0.2)";
+    ctx.fillRect(0, 0, w, h);
+
+    particles = particles.filter(p => p.life > 0);
+    particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.05;
+        p.life -= 0.01;
+
+        ctx.globalAlpha = p.life;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+    });
+
+    if (Math.random() < 0.04) firework();
+    requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
